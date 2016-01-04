@@ -1,0 +1,322 @@
+//inventory
+#include <vector>
+#include <cctype>
+#include <cstdlib>
+using namespace std;
+int count=0;
+void uppercaseify(string &str) {
+    for (char &ch : str) ch = toupper(ch);
+}
+
+void die() {
+    cout << "Invalid Input!\n";
+    exit(EXIT_FAILURE);
+}
+
+class Inventory {
+
+    vector<string> cars;
+    string name;
+    public:
+    Inventory(string new_name) {
+        name = new_name;
+        uppercaseify(new_name);
+        if (name != new_name) die();
+    }
+    bool is_in(string search) {
+        for (string car : cars)
+            if (car == search) return true;
+        return false;
+    }
+    void insert(string new_car) {
+        //cout << "Inserting: " << new_car << endl;
+        string temp = new_car;
+        uppercaseify(temp);
+        if (temp != new_car) die();
+        if (is_in(new_car)) return; //Don't allow duplicates
+        //cout << "Inserted: " << new_car << endl;
+        cars.push_back(new_car);
+    }
+    Inventory intersect(const Inventory &other) {
+        Inventory retval(name + " INTERSECT " + other.name);
+        for (string car : cars)
+            for (string other_car : other.cars)
+                if (car == other_car)
+                    retval.insert(car);
+        return retval;
+    }
+    Inventory unionize(const Inventory &other) {
+        Inventory retval(name + " UNION " + other.name);
+        for (string car : cars)
+            retval.insert(car);
+        for (string other_car : other.cars)
+            retval.insert(other_car);
+        return retval;
+    }
+    Inventory add(const Inventory &rhs) {
+        Inventory retval(name);
+        for(string car : cars)
+            retval.insert(car);
+        for(string rhs_car : rhs.cars)
+            retval.insert(rhs_car);
+        return retval;
+    }
+
+
+    int size() {
+        return cars.size();
+    }
+    string get_name() {
+        return name;
+    }
+    friend istream& operator>>(istream &ins, Inventory &other);
+    friend ostream& operator<<(ostream &outs, Inventory &other);
+}; //End of inventory
+
+class SuperSet {
+    vector<Inventory> set;
+    public:
+    void insert(Inventory new_inv) {
+        set.push_back(new_inv);
+    }
+    //It will return the inventory matching name
+    Inventory& search(string name) {
+        for (Inventory &inv : set)
+            if (inv.get_name() == name)
+                return inv;
+        cout << "NO MATCH!\n";
+        die();
+        Inventory *retval = new Inventory("No Match");
+        return *retval;
+    }
+    //searches for a name through the superset and returning true if finds a match
+    bool search_name(string name) {
+        for(Inventory inv : set) {
+            if(inv.get_name() == name)
+                return true;
+        }
+        return false;
+    }
+    int unique() {
+        int total = 0;
+        Inventory uni("UNI");
+        //go through and count all unqiue values and store into Table 'uni'
+        for(Inventory inv : set) {
+            Inventory &z = inv;
+            //add every instance of inventory to uni to get count
+            uni = uni.add(z);
+        }
+        //call size function to get total number of unique values
+        total = uni.size();
+        return total;
+    }
+    void print_all() {
+        for (Inventory inv : set) {
+            //Tally up the count of all cars here
+            cout << inv.get_name() << ": " << inv;
+        }
+        cout<<count<<endl;
+        //Print out the count here
+    }
+    void poset() {
+        //Do the partial ordering of the sets here
+    }
+};
+//holds all inventories in a master "Inventory"
+SuperSet Master_Inventory;
+int main() {
+    vector<string> current_tables;
+    //input variable holders
+    string new_table,value, table_one_id, table_two_id, user_command, trash;
+    while(true) {
+
+        string temp_uc;
+        //get entire string and store it in temp_command
+        getline(cin, temp_uc);
+        //if the input = end of line character then break
+        if(cin.eof()) {break;}
+        //store string up to first whitespace and store it in command
+        istringstream recorded_command(temp_uc);
+        recorded_command >>user_command;
+
+        //if(command == "CREATE TABLE") 
+        if(user_command == "CREATE") {
+            //  cout<<"user_comman= CREATE"<<endl;
+            //store first word 
+            recorded_command >> user_command;
+            if(user_command == "TABLE") {
+                //      cout<<"user_comman= CREATE Table"<<endl;
+                recorded_command >> new_table;
+                //              current_tables.push_back(new_table);
+                //  for (auto i : current_tables ) {  cout << i;    }
+                //  cout<<endl<<"user_comman= "<<new_table<<endl;
+                //search by name to make sure there are no duplicate tables of that name in the
+                //Master_Inventory
+
+                //cout<<Master_Inventory.search_name(new_table);    
+                if(Master_Inventory.search_name(new_table)) { die(); }
+                //since there are no doublicates create a table_to_be_inserted holding the table name passed by user
+                Inventory table_tobe_inserted(new_table);
+                //call member function to insert table
+                Master_Inventory.insert(table_tobe_inserted);
+            }
+            //make sure it 's TABLE and not Table TABle etc.
+            if(user_command != "TABLE") { die(); }
+
+        }
+        //repeat steps for creat except search for keywords Insert 
+        else if (user_command == "INSERT") {
+            //store first word 
+            recorded_command >> user_command;
+            //      cout<<endl<<"INSERT = "<<user_command<<endl;
+            if(user_command == "INTO") {
+                recorded_command >> new_table;
+                string table_being_insertedto=new_table;
+                //  cout<<endl<<"INSERT INTO "<<table_being_insertedto<<endl;
+                if(Master_Inventory.search_name(new_table)) {
+                    Inventory &z = Master_Inventory.search(new_table);
+                    recorded_command >> user_command;
+                    if(user_command == "VALUES") {
+                        //tmp string value to hold values from getline
+                        string values;
+                        //!!!removing white space after the word "VALUES"
+                        ws(recorded_command);
+                        //store comma separated values into values
+                        getline(recorded_command,values);
+                        //store string up to first whitespace and store it in command              
+
+                        istringstream recorded_values(values);
+
+                        recorded_values >> z;
+
+                    }
+                    //  else {  die();  }
+                }
+                else { die();}
+            }
+            else{
+                die();}
+        }
+        //  else {      die();}
+
+        else if (user_command == "SELECT") {
+            recorded_command >> user_command;
+            //cout << "UC: " << user_command << endl;
+            string hold = user_command;
+            //make hold uppercase
+            uppercaseify(hold);
+            if(user_command == "FROM") {
+                recorded_command >> new_table;
+                //cout << "NT: " << new_table << endl;
+                if(Master_Inventory.search_name(new_table)) {
+                    Inventory &first = Master_Inventory.search(new_table);
+                    recorded_command >> user_command;
+                    //cout << "UC: " << user_command << endl;
+                    if(user_command == "UNION") {
+                        recorded_command >> table_one_id;
+                        //cout << "T1I: " << table_one_id << endl;
+
+                        //search throughh master and check if there is
+                        //match for table_one_id in master
+                        if(Master_Inventory.search_name(table_one_id)) {
+                            Inventory &second = Master_Inventory.search(table_one_id);
+                            Inventory united = first.unionize(second);
+                            //cout << "UNITED WE STAND\n";
+                            cout << united;
+
+                        }
+
+                        else { die(); }
+                    }
+
+                    else if(user_command != "UNION") { die(); }
+                }
+                else { die(); }
+            }
+
+            else if(user_command == "*") {
+                recorded_command >> user_command;
+                if(user_command == "FROM") {
+                    recorded_command >> user_command;
+                    if(user_command == "*") {
+                        //count the total number of unique 
+                        count =Master_Inventory.unique();
+                        Master_Inventory.print_all();
+                        //      cout<<count<<endl;
+                    }
+
+                    else if(Master_Inventory.search_name(user_command)) {
+                        Inventory x = Master_Inventory.search(user_command);
+                        recorded_command >> user_command;
+                        if(user_command == "INNER") {
+                            recorded_command >> user_command;
+                            if(user_command == "JOIN") {
+                                recorded_command >> new_table;
+                                if(Master_Inventory.search_name(new_table)) {
+                                    Inventory y = Master_Inventory.search(new_table);
+                                    Inventory z = x.intersect(y);
+                                    cout << z;
+                                    //  cout << endl;
+                                }
+                                else if(!Master_Inventory.search_name(new_table)) {
+                                    die();
+                                }
+                            }
+                            else if(user_command != "JOIN") { die(); }
+                        }
+                        else if(user_command != "INNER") { die(); }
+                    }
+                    else if(!Master_Inventory.search_name(user_command)) {
+                        die();
+                    }
+                }
+                else if(user_command != "FROM") { die(); }
+            }
+            else if(user_command != "*") { die (); }
+        }
+        else { die(); }
+        //  count = Master_Inventory.unique();
+        //  Master_Inventory.print_all();
+        //  cout << endl;
+    }
+    return 0;
+
+
+
+    //end main
+}
+
+istream& operator>>(istream &ins, Inventory &other) {
+    string temp;
+    getline(ins,temp);
+    istringstream input(temp);
+    while (input) {
+        string car;
+        getline(input,car,',');
+        if(Master_Inventory.search_name(car))
+        {
+            Inventory list = Master_Inventory.search(car);
+            if(car != other.name)
+            {
+                other = other.add(list);
+            }
+            else { die(); }
+        }
+        if (car.length() <= 0) break;
+        //cout << "Inserting: " << car << endl;
+    //  other.insert(car);
+ if(!(Master_Inventory.search_name(car)))
+             { other.insert(car); }
+    //cout << "New size: " << other.size() << endl;
+    }
+    return ins;
+}
+ostream& operator<<(ostream &outs, Inventory &other) {
+    //cout << "Other size: " << other.size() << endl;
+    for (int i = 0; i < other.size(); i++) {
+        outs << other.cars.at(i);
+        if (i != other.size() - 1) outs << ", ";
+        else outs << endl;
+    }
+    return outs;
+}
