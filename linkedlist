@@ -1,0 +1,133 @@
+#include <iostream>
+#include "list.h"
+#include "node.h"
+using namespace std;
+
+#define MEMORY_LEAK(X) X
+
+#define DEBUG(X) X 
+
+//YOU: Write these four functions
+//Make sure you handle empty Lists cleanly!
+
+//Deletes the oldest Node inserted, and returns its data value
+//The oldest Node inserted should be tail_ptr
+int List::pop() {
+    //exit if there is only one node
+    if(head_ptr==NULL){
+        return 0;
+    }
+    int oldestdata=tail_ptr->get_data();
+    //store copy of tail-ptr data
+
+    Node *HoldsTail_Ptr= tail_ptr;
+    //make a copy of Tail_ptr
+    Node  *cur=head_ptr;
+
+    for(int i=list_size;i>2;i--){
+
+        cur=cur->get_next();
+
+    }
+    tail_ptr=cur;
+    tail_ptr->set_next(NULL);
+    MEMORY_LEAK(delete HoldsTail_Ptr;)
+    list_size--;
+    if (list_size == 0) {
+        head_ptr = NULL;
+        tail_ptr = NULL;
+    }
+    return oldestdata;
+}
+
+//Adds a new Node to the end of the list
+//The newest Node will be held in head_ptr
+void List::push(int new_data) {
+    //determine the end of the l
+    if(tail_ptr==NULL){
+        Node *TmpNode= new Node (new_data, NULL);
+        head_ptr = tail_ptr = TmpNode;
+    }
+    else {
+        Node *TmpNode= new Node (new_data, head_ptr);
+        head_ptr=TmpNode;
+    }
+    list_size++;
+}
+//Returns if a Node containing the passed-in integer is in the list
+//True if such a Node exists, false otherwise
+bool List::search(int test_data) {
+    Node *searchnode=head_ptr;
+    while(searchnode!=NULL){
+        if(test_data==searchnode->get_data()){
+            return true;
+
+        }
+        searchnode=searchnode->get_next();
+
+    }
+    return false;
+}
+
+//Removes the newest node containing the passed in integer
+//Only remove one Node. Not all of them.
+//Return true if any elements removed, false otherwise
+bool List::remove (int old_data) {
+    Node *tmp_head = head_ptr;
+    //tmp head searcyes ahd destroys the item
+    if(tmp_head == NULL) {
+        //if head_ptr  is empty
+
+        return false;
+        //so is the list list, so there is nothing to remove
+    }
+
+    if(!search(old_data)) { return false; }
+
+    //if the value is not in there, then false
+
+    if(head_ptr -> get_data() == old_data) {
+        //if the value is in the head ptr
+
+        head_ptr = head_ptr -> get_next();
+        //move the head pointer up a spot in the list
+            MEMORY_LEAK(delete tmp_head;)
+            //and delete tmp which stores the value of head
+        list_size--;
+        if (list_size == 0) tail_ptr = NULL;
+            //update the list because invariant     
+        return true;
+    }
+    else if(tail_ptr -> get_data() == old_data) {
+        //if the tail pointer has the data
+        pop();
+
+        return true;
+    }
+
+    else {
+        tmp_head = tmp_head -> get_next();
+        //move one after the head pointer
+        Node *tmp = head_ptr;
+
+        //make a variable to follow one step behind the destoyer
+        for(; tmp_head; tmp_head = tmp_head -> get_next()) {
+            //iterate through the list
+            if(tmp_head -> get_data() == old_data) {
+                //if found then set temp to object after tmp_head
+                tmp -> set_next(tmp_head -> get_next());
+
+
+                MEMORY_LEAK(delete tmp_head;)
+                list_size--;
+                    return true;
+                }
+            tmp = tmp_head;
+        }
+
+    }
+        return false;
+
+
+
+}
