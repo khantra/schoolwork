@@ -1,0 +1,62 @@
+//recursive
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <cctype>
+#include <cstdlib>
+using namespace std;
+int count=0;
+void uppercaseify(string &str) {
+    for (char &ch : str) ch = toupper(ch);
+}
+
+void die() {
+    cout << "Invalid Input!\n";
+    exit(EXIT_FAILURE);
+}
+
+class Inventory {
+
+    vector<string> cars;
+    string name;
+    public:
+    Inventory(string new_name) {
+#include <iostream>
+using namespace std;
+
+//void recurasterisk(int,int);
+void recurasterisk(int count, int n){
+
+    //if the first count print once
+    //otherwise i=1-2 <5 means **
+    //i=1-3 <5 ***
+    //i=1-4<5 *****
+    //i=1-5 <=5 *****
+    for(int i = 1; i <= count; i++){
+        cout << "*"<< " ";
+    }
+
+    cout << endl;
+    //once count=5=n it escapes 
+    if(count < n){
+        //2
+        recurasterisk(count+1,n);
+    }
+    //1st count= 5  *****
+    //2nd c=4 ****
+    //etc c=1 *
+    for(int i = 1; i <= count; i++){
+        cout << "*" << " ";
+    }
+    --count;
+    cout << endl;
+}
+
+int main(){
+
+    int n = 0;
+    cin >> n;
+    int count=1;
+    recurasterisk(count,n);
+    return 0;
+}
