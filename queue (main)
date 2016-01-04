@@ -1,0 +1,106 @@
+#include <string>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include "queue.h"
+using namespace std;
+
+void uppercaseify(string& mystr);
+
+int main(int argv, char* argc[]) {
+    /* Uncomment this section to see how argc and argv works,
+     * just be sure to comment it back out before the deadline...
+    cout << "Argv: " << argv << endl;
+    for (int i = 0; i < argv; i++)
+        cout << "Argc[" << i << "]: " << argc[i] << endl;
+    */
+
+
+    //If we have any command line parameters, time the run
+    bool will_clock = false;
+    if (argv > 1) will_clock = true;
+
+    //If the person does not enter a command line parameter
+    //default to array version
+    int mode = Queue<int>::ARRAY_MODE;
+    if (argv > 1) mode = atoi(argc[1]); //Allow user to change mode from command line.
+    if (mode < Queue<int>::LINKED_LIST_MODE || mode > Queue<int>::VECTOR_MODE)
+    mode = Queue<int>::ARRAY_MODE;
+
+    /* Uncomment this section to see what parameters we'll be using
+     * again, be sure to comment it back out before turning in your homework
+    cout << "will_clock: " << boolalpha << will_clock << endl;
+    cout << "mode: " << mode << endl;
+    */
+
+    Queue<string> myqueue(mode);
+    string operation;
+    string data;
+
+    //Capture the start time
+    clock_t start_time = clock();
+
+    while (cin) {
+        cin >> operation;
+        uppercaseify(operation);
+        if (!cin || cin.eof() || operation == "QUIT") {
+            break;
+        }
+        if (operation == "STATUS") {
+            cout << myqueue.get_queue_size() << endl;
+        }
+        if (operation == "PRINT") {
+            myqueue.print_queue();
+        }
+        if (operation == "PUSH") {
+            cin >> data;
+            myqueue.push(data);
+        }
+        if (operation == "POP") {
+            data = myqueue.pop();
+            cout << data << endl;
+        }
+        if (operation == "SEARCH") {
+            cin >> data;
+            if (myqueue.search(data))
+                cout << "IN QUEUE\n";
+            else
+                cout << "NOT IN QUEUE\n";
+        }
+        if (operation == "REMOVE") {
+            cin >> data;
+            if (myqueue.remove(data))
+                cout << "REMOVED\n";
+            else
+                cout << "NOT REMOVED\n";
+        }
+    }
+
+    //Capture the finish time, then output the time elapsed
+    //We will write it to cerr so that we can see it even when writing the file to an outputfile
+    clock_t end_time = clock();
+    if (will_clock)
+        cerr << "Total running time: " << 1000*(double(end_time - start_time)/CLOCKS_PER_SEC) << " ms" << endl;
+
+    return 0;
+}
+
+void uppercaseify(string& mystr) {
+    for (auto& c: mystr)
+        c = toupper(c);
+}
+//node.h
+#pragma once
+
+//This Node class is fully functional
+template <class T>
+class Node {
+    T data = 0; //Holds the data we're keeping track of
+    Node *next = NULL;
+    public:
+    Node() {}
+    Node(T new_data, Node *new_next) : data(new_data), next(new_next) {}
+    T get_data() const { return data; }
+    Node *get_next() const { return next; }
+    void set_next(Node *new_next) { next = new_next; }
+};
