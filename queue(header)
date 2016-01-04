@@ -1,0 +1,285 @@
+//queue.h
+#include <iostream>
+#include <assert.h>
+#include <vector>
+#include "node.h"
+using namespace std;
+
+//This is a class to implement a queue
+//Its interesting feature is that it allows the user to select how
+// the queue will be implemented - either as a linked list, a C-style array
+// or by using the modern C++ vector class.
+template <class T>
+class Queue {
+    static const int MAX_SIZE = 500000; //100K max elements; Warning: Cannot be more than MAX_INT / 2
+    int mode; //Holds how we are implementing the queue, either as linked list, array, or vector
+    int queue_size = 0; //Current number of elements in queue, not used in vector mode
+
+    //These are used in Linked List mode
+    Node<T> *head_ptr = NULL; //Holds newest member
+    Node<T> *tail_ptr = NULL; //Holds oldest member
+
+    //These are used in Array mode
+    int head = 0; //Which index the head is at
+    int tail = 0; //Which index the tail is at, which is +1 past all valid elements
+    T queue_arr[MAX_SIZE];
+    //Circular array get/set methods -
+    //Access will correctly wrap around indices that overflow or underflow
+    //template<class T>
+    //NO T access(T index) const{
+    //while
+    int access(int index) const {
+        while (index < 0) index += MAX_SIZE;
+        if (index >= MAX_SIZE) index = index % MAX_SIZE;
+        return index;
+    }
+
+    //Will return the Nth element of the array, handling overflow and underflow via access()
+    //template<class T>
+    //T get_element(int index) const{
+    //return queue_ar[access(index)]};
+    //}
+    //int to T
+    T get_element(int index) const {
+        return queue_arr[access(index)];
+    }
+    //Sets the Nth element of the array, handling overflow and underflow via access()
+       //template<class T>
+       //void set_element(T index, int new_value) {
+       //        queue_arr[access(index)] = new_value;
+       //            }    
+//new_value returns T insitead of Int
+    void set_element(int index, T new_value) {
+        queue_arr[access(index)] = new_value;
+    }
+
+    //This is used in Vector mode
+    //changed to t from int
+    vector<T> queue_vec{};
+
+    public:
+    static const int LINKED_LIST_MODE = 0;
+    static const int ARRAY_MODE = 1;
+    static const int VECTOR_MODE = 2;
+    Queue(int new_mode = ARRAY_MODE) : mode(new_mode) {}
+
+    //These are done for you
+    void print_queue() const{
+if (get_queue_size() <= 0) {
+        cout << "EMPTY QUEUE\n";
+        return;
+    }
+    int counter = 0;
+    if (mode == LINKED_LIST_MODE) {
+        assert(head_ptr);
+        Node<T> *temp_ptr = head_ptr;
+        while (temp_ptr) { //Same as saying while (temp_ptr != NULL)
+            cout << "Node " << counter++ << ": " << temp_ptr->get_data() << endl;
+            temp_ptr = temp_ptr->get_next();
+        }
+    } else if (mode == VECTOR_MODE) {
+        for (auto &i : queue_vec) {
+            cout << "Node " << counter++ << ": " << i << endl;
+        }
+    } else { //Array mode
+        //Note: if our list size is 2, then tail will be head+2
+        //In other words, it points to the next place we will insert, not a valid element
+        int start_index = head;
+        int end_index = tail;
+        if (tail < head) //Handle if we've wrapped around
+            end_index += MAX_SIZE;
+        for (int i = start_index; i < end_index; i++) {
+            cout << "Node " << counter++ << ": " << get_element(i) << endl;
+        }
+    }
+    }
+    int get_queue_size() const{
+if (mode != VECTOR_MODE)
+        return queue_size;
+    else
+        return queue_vec.size();
+}
+    T pop(){
+
+ //Handle an empty Queue
+    if (get_queue_size() <= 0) return 0;
+    queue_size--;
+
+    if (mode == LINKED_LIST_MODE) {
+        //Save the value that will be returned
+        assert(head_ptr);
+        assert(tail_ptr);
+        T ret_val = tail_ptr->get_data();;
+
+        //Handle a Queue of size one
+        if (queue_size == 0) {
+            delete tail_ptr;
+            head_ptr = tail_ptr = NULL;
+            return ret_val;
+        }
+
+        //Otherwise, scan through the Queue until we reach the one before the tail
+        Node<T> *prev_ptr = head_ptr;
+        while (prev_ptr->get_next() != tail_ptr)
+            prev_ptr = prev_ptr->get_next();
+        delete tail_ptr;
+        tail_ptr = prev_ptr;
+        return ret_val;
+    } else if (mode == VECTOR_MODE) {
+        T ret_val = queue_vec.at(0);
+        queue_vec.erase(queue_vec.begin());
+        return ret_val;
+    } else { //ARRAY_MODE
+        T ret_val = get_element(head);
+        head = access(head+1); //Increment head, and wrap around if we overflow
+        return ret_val;
+    }
+}
+    //You'll need to write these
+    void push(T new_data){
+  //changed from < to <==
+    assert(get_queue_size()+1 <= MAX_SIZE); //Make sure theres room
+    queue_size++;
+
+    if (mode == LINKED_LIST_MODE) {
+        Node<T> *new_ptr = new Node<T>(new_data,head_ptr);
+        head_ptr = new_ptr;
+        if (queue_size == 1)
+            tail_ptr = head_ptr;
+    } else if (mode == VECTOR_MODE) {
+        queue_vec.push_back(new_data);
+    } else { //ARRAY_MODE
+        //Write new_data into tail, and then increment tail
+        //store the head and tail of the array 
+        /*  int start_index = head;
+            int end_index = tail;
+        //int tail_val=get_element(end_index);
+        if (tail < head) //Handle if we've wrapped around
+        end_index += MAX_SIZE;
+        */
+        queue_arr[tail]=new_data;
+        tail++;
+    }
+}
+//testdata switched to T
+    bool search(T test_data) const{
+ if (get_queue_size() <= 0) return false;
+
+    if (mode == LINKED_LIST_MODE) {
+        for (Node<T> *temp = head_ptr; temp; temp = temp->get_next())
+            if (temp->get_data() == test_data)
+                return true;
+        return false;
+    } else if (mode == VECTOR_MODE) {
+        //Non-iterator method
+        for (auto i : queue_vec) {
+            if (i == test_data) return true;
+        }
+        return false;
+    } else { //ARRAY_MODE
+        //Start at head, end at tail, return true if its in there
+        //You should also handle wrapping around the array as well
+        //If it is found...
+        int start_index = head;
+        int end_index = tail;
+        if (tail < head) //Handle if we've wrapped around
+            end_index += MAX_SIZE;
+        for (int i = start_index; i < end_index; i++) {
+            //hold the value of current array ce11111ll
+//curent val changed from int to T
+            T current_val=get_element(i);
+            //current_val=([0]=1);
+            //in11t tail_val=get_element(tail);
+            //tail_val=([0]=1);
+            if(test_data==current_val){
+                //if there is a match update tail with current value
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+//old_data changed to T from int
+    bool remove (T old_data){
+//if (search(old_data)) { //If it is in the Queue...
+if (queue_size == 1) {
+       pop(); //Because this must be it    
+return true;
+}
+
+queue_size--; //All possible paths will successfully remove a Node
+
+if (mode == LINKED_LIST_MODE) {
+//Handle head holding the value
+if (head_ptr->get_data() == old_data) {
+Node<T> *temp_ptr = head_ptr->get_next();
+delete head_ptr;
+head_ptr = temp_ptr;
+return true;
+}
+
+Node<T> *prev_pointer = head_ptr; //This will be used to clean up the linked Queue
+for (Node<T> *temp_ptr = head_ptr->get_next(); temp_ptr; temp_ptr = temp_ptr->get_next())     {
+if (temp_ptr->get_data() == old_data) {
+if (temp_ptr == tail_ptr) tail_ptr = prev_pointer; //Clean up tail pointer
+prev_pointer->set_next(temp_ptr->get_next()); //Fix the linked Queue
+delete temp_ptr;
+return true;
+}
+prev_pointer = temp_ptr; //Prev pointer moves in lockstep behind temp_ptr
+}
+} else if (mode == VECTOR_MODE) {
+//Non-Iterator method for finding things
+for (int i = queue_vec.size() - 1; i >= 0; i--) {
+if (queue_vec.at (i) == old_data) {
+queue_vec.erase(queue_vec.begin()+i);
+return true;
+}
+}
+} else { //ARRAY_MODE
+//Search from head towards tail for the match
+//When you find it, move all the previous elements up by one, then...
+int start_index = head;
+int end_index = tail;
+if(end_index <= start_index && queue_size != 0)
+end_index += MAX_SIZE;
+for(int i = start_index; i < end_index; i++)
+if(old_data == get_element(i)) {
+for(int x = i; x > start_index; x--) {
+set_element(i, get_element(i-1));
+}
+set_element(head, 0);
+head = access(head+1);
+return true;
+}
+}
+}
+
+    //Don't worry about these - it just means not to allocate default
+    // functions for the copy constructor or assignment operator
+    Queue(const Queue&) = delete;
+    Queue operator=(const Queue&) = delete;
+};
+
+//node.h
+#include <iostream>
+#pragma once
+
+//This Node class is fully functional
+class Node {
+    int data; //Holds the data we're keeping track of
+    Node *next;//holds the address to the next node
+    public:
+    Node() {
+        data = 0;
+        next = NULL;
+    }
+    Node(int new_data, Node *new_next) {
+        data = new_data;
+        next = new_next;
+    }
+    int get_data() const { return data; }
+    Node *get_next() const { return next; }
+    void set_next(Node *new_next) { next = new_next; }
+};
