@@ -1,0 +1,378 @@
+# include <iostream>
+# include <cstdlib>
+# include <cctype>
+# include <string>
+# include <vector>
+# include <iterator>
+# include <algorithm>
+#include <sstream>
+using namespace std;
+int printcount=0;
+int counter=0;
+class node
+{
+    public:
+        //Define 
+        int data=0;
+        node *left=NULL;
+        //holds greater value
+        node  *right=NULL;
+        //every node has a parent even leaves
+        node *parent=NULL;
+
+        //  public:
+        //constructor
+        //  node()
+
+        node(int newdata=0, node *newleft=NULL, node *newright=NULL,node *newparent=NULL  ) {
+            // Constructor.  Make a node containing str.
+            data =newdata ;
+            parent=newparent;
+            left =newleft;
+            right =newright;
+        }
+
+        //  ~node();
+        node *get_left_node() const { return left; }
+        node *get_right_node() const { return right; }
+        node *get_parent_node() const { return parent; }
+        int get_node_data() const { return data; }
+
+        void set_left_node(node *newnode) { left= newnode; }
+        void set_right_node(node *newnode) { right= newnode; }
+        void set_parent_node(node *newnode) { parent= newnode; }
+        void set_data( int newdata) {
+
+            cout<<"newdata: "<<newdata<<endl;
+            data= newdata; }
+};
+
+node  *minValue(node *temp ) {
+    if (!temp) return NULL;
+    while(temp->left != NULL) temp = temp->left;
+    return temp;
+}
+
+int countNodes( node *root ) {
+    if ( root == NULL )
+        return 0;  // The tree is empty.  It contains no nodes.
+    else {
+        int count = 1;   // Start by counting the root.
+        count += countNodes(root->left);  // Add the number of nodes
+        //     in the left subtree.
+        count += countNodes(root->right); // Add the number of nodes
+        //    in the right subtree.
+        return count;  // Return the total.
+    }
+} // end countNodes()
+
+
+class BST{
+
+    public:
+        node *root;
+        //Define
+        BST() { root= NULL; };
+        //  ~BST();     
+        bool isEmpty() const { return root==NULL; }
+        node *get_root(){
+            return root;
+        }
+        void    insert(int pushedvalue,node *newnode ){
+
+            //  cout<<"ROOT VALUE "<< root->get_node_data()<<endl;
+            //if the tree is empty set root equal to value      
+            node *tmp=newnode;
+            bool newnodetf=true;
+            //if (pushedvalue == newnode->data){cout<<"DUPLICTATE"<<endl;    return;}
+            //  node *newtemp=search(pushedvalue,newnode );
+            //  cout<<"DATA vA"<<newtemp->data<<endl;
+            //  if(newtemp ){cout<<"DUPLICATE"<<endl;  return;   }
+            while(newnodetf){
+                if (newnode==NULL ){
+                    root=new node (pushedvalue,NULL,NULL,NULL);
+                    cout<<"SUCCESS"<<endl;
+            counter++;
+                    newnodetf=false;
+                    return;
+                }
+                else{
+                    newnodetf=false;
+                }
+            }
+            //if new data is less than root then place is root-left
+            //  cout<<"Insert fishy get data"<<endl;
+            //  cout<<"new root value  "<< tmp->data<<endl<<"PUSHED VALUE "<<pushedvalue<<endl;
+            if(newnode->data==pushedvalue) {
+                cout<<"DUPLICATE"<<endl;
+                return;
+            }
+            if( pushedvalue< tmp->get_node_data()  ){
+                if(tmp->get_left_node()== NULL){
+                    tmp->set_left_node(new node (pushedvalue,NULL,NULL,NULL));
+                    node *copytmp=tmp->get_left_node();
+
+                    copytmp->set_parent_node(tmp);
+                counter++;
+                     cout<<"SUCCESS"<<endl;
+                    return;
+                }
+
+                insert( pushedvalue, newnode->get_left_node() );
+            }
+            else{
+                if ( tmp->get_right_node()== NULL ){
+                    tmp->set_right_node(new node (pushedvalue,NULL,NULL,NULL));
+                    node *copytmp=tmp->get_right_node();
+                    copytmp->set_parent_node(tmp);
+                    counter++;
+                 cout<<"SUCCESS"<<endl;
+                    return;
+
+                }
+                insert( pushedvalue,newnode->get_right_node() );
+            }
+        }
+        node*  search(int searchedvalue,node *newnode ){
+            node *tmp=newnode;
+            if(newnode==root && newnode==NULL){
+          cout<< "NOTFOUND"<<endl;
+            //  return new node (0,NULL,NULL,NULL);
+                return 0;
+            }
+            if(searchedvalue==root->get_node_data() ){
+                cout<<"SUCCESS"<<endl;
+    //          counter++;
+                return root;
+            }
+            else if(searchedvalue< tmp->get_node_data()){
+                if ( tmp->get_left_node()!= NULL && tmp->get_left_node()->get_node_data()==searchedvalue ){
+                    cout<<"SUCCESS"<<endl;
+                    return tmp->get_left_node();
+
+                }
+                else if(tmp->get_left_node()== NULL){
+                    cout<< "NOTFOUND"<<endl;
+                    //  break;
+                    return tmp->get_left_node();
+
+                }
+                else{
+                    search( searchedvalue, newnode->get_left_node());
+                }
+            }
+            else {
+                if ( tmp->get_right_node()!= NULL && tmp->get_right_node()->get_node_data()==searchedvalue ){
+    //              counter++;
+                    cout<<"SUCCESS"<<endl;
+                    return tmp->get_right_node();
+                }
+                else if(tmp->get_right_node()== NULL){
+                    cout<< "NOTFOUND"<<endl;
+                    //  break;
+                    return tmp->get_right_node();
+                }
+
+                else{
+                    search(searchedvalue, newnode->get_right_node());
+                }
+
+            }
+        }
+
+
+        void del(int data, node *searchednode ){
+        if(counter==0){
+         cout<<"NOTFOUND"<<endl;
+        return;
+        }
+            node *found = search(data,searchednode);
+            if (found==NULL){
+                return;}
+            //Case 1 - Leaf
+            if (found->left == NULL && found->right == NULL) {
+                if (found == root){ // && (root->left==NULL && root->right==NULL) ) {
+                    root=NULL;
+                    return;
+                }
+                if (found == found->parent->left){
+                    found->parent->left = NULL;}
+                else{
+                    found->parent->right = NULL;
+                //  if (!found) return;
+
+                    delete found;
+//              cout<<"44  SUCCESS"<<endl;
+                }
+            }
+            //Case 2 - Two Children
+            else if (found->left != NULL && found->right != NULL) {
+
+                node *temp = found->left;
+        //      root=temp;
+                while (temp->right != NULL) temp = temp->right;
+                swap(found->data,temp->data);
+                if (temp == temp->parent->left)
+                    temp->parent->left = NULL;
+                else
+                    temp->parent->right = NULL;
+                delete temp;
+            //   cout<<"SUCCESS"<<endl;
+            }
+            //Case 3 - One child
+            else {
+                if (found->right != NULL){
+                    if(found==root){
+                        root=found->right;
+                        found->right->parent=NULL;
+
+                    }
+                    else{
+                    if (found->data>found->parent->data){
+                    found->parent->right= found->right;
+                    found->right->parent=found->parent;
+                    }
+                    else {
+                    found->parent->left= found->right;
+                                        found->right->parent=found->parent;
+                    }
+                    }
+
+                    delete found;
+                //   cout<<"SUCCESS"<<endl;
+                }
+
+                else if (found->left != NULL){
+                    if(found==root){
+                    root=found->left;
+                    found->left->parent=NULL;
+                    }
+                    else{
+                          if (found->data>found->parent->data){
+                    found->parent->right= found->left;
+                    found->left->parent=found->parent;
+                    }
+                          else{
+                        found->parent->left= found->left;
+                         found->left->parent=found->parent;
+                          }
+                    delete found;
+    //               cout<<"4 SUCCESS"<<endl;
+                }
+                }
+                else {
+                     cout << "WHAT.\n";
+                    exit(1);
+                }
+            }
+
+        }
+
+
+
+void print(node *v ){
+//if true then counter is zero
+  if(v != NULL){
+
+                    print(v -> left);
+                    cout << v -> data << endl;
+                    print (v -> right);
+
+}
+}
+};
+
+
+
+
+/*
+ *  * Main Contains Menu
+ *   */
+int main()
+{
+    int choice, num;
+    string command;
+
+    BST bst;
+    node *temp;
+/*  
+    
+    cout<<"-----------------"<<endl;
+    cout<<"Operations on BST"<<endl;
+    cout<<"-----------------"<<endl;
+    cout<<"INSERT <int value> "<<endl;
+    cout<<"DELETE <int value> "<<endl;
+    cout<<"FIND <int value> "<<endl;
+    cout<<"PRINT "<<endl;
+    cout<<"EXIT "<<endl;
+    cout<<"Continue to enter your choice, type EXIT when you are done.";
+*/
+
+    while (1)
+    {
+        /*      vector<string> data;
+                copy(istream_iterator<string>(cin), istream_iterator<string>(),
+                back_inserter(data));
+                command = data[0];
+                transform(command.begin(), command.end(), command.begin(), ::toupper);
+                */
+
+        string temp_uc,user_command;
+        //get entire string and store it in temp_command
+        getline(cin, temp_uc);
+        //if the input = end of line character then break
+        if(cin.eof()) {break;}
+        //store string up to first whitespace and store it in command
+        istringstream recorded_command(temp_uc);
+        recorded_command >>user_command;
+        if (user_command == "INSERT")
+        {
+            //store first word 
+            recorded_command >> user_command;
+            int pushedvalue = atoi(user_command.c_str());
+            bst.insert(pushedvalue, bst.get_root() );
+
+        }
+        else if (user_command == "DELETE")
+        {
+            recorded_command >> user_command;
+
+            int pushedvalue = atoi(user_command.c_str());
+            //   node *tmpdel =bst.search(pushedvalue, bst.get_root() );
+            //cout<<"NODE TO BE REMOVED VALUE check "<<tmpdel->get_node_data()<<endl;
+            bst.del(pushedvalue, bst.get_root());
+        }
+
+        //cout<<"VALE="<< pushedvalue<<endl;
+        //  bst.del(pushedvalue );
+
+        else if (user_command== "FIND")
+        {
+
+            //store first word 
+            recorded_command >> user_command;
+            int pushedvalue = atoi(user_command.c_str());
+            bst.search(pushedvalue,bst.get_root() );
+        }
+        else if (user_command == "PRINT")
+        {
+                if(bst.get_root() == NULL)
+                        {
+                        cout << "NULL" << endl;
+                        }
+                 else{
+                        cout << "BEGIN" << endl;
+                        bst.print( bst.get_root() );
+                        cout << "END" << endl;
+                        }
+        }
+        else if (user_command == "EXIT")
+        {
+            exit(1);
+        }
+        else
+        {
+            cout<<"Wrong choice"<<endl;
+        }
+    }//end while
+}//end main
