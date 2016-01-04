@@ -1,0 +1,64 @@
+//mergesort
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <fstream>
+using namespace std;
+
+//BEGIN GOLF
+//All semicolons between here and the end count as a stroke against you
+
+//This function will sort the given vector from vec[start] to vec[end], LEAST TO GREATEST
+//You must do it recursively, and can only write code in this section (between the BEGIN and END)
+
+//store in vec from leas to greates 
+
+//END GOLF
+void merge(vector<unsigned int> &vec, vector<unsigned int> &left, vector<unsigned int> &right, int li,int ri,int vi  )
+{
+        while(li< left.size() && ri<right.size()){
+                    ((left[li]<right[ri] || ri==right.size() ) ) ? vec[vi++] = left[li++]: vec[vi++] = right[ri++];
+
+                        }
+
+            while(li < left.size())  {
+                        vec[vi++] = left[li++];
+                            }
+
+                while(ri < right.size())
+                        {
+                                    vec[vi++]=right[ri++];
+                                        }
+
+
+}
+void mergesort(vector<unsigned int> &vec,int start, int end) {
+        if(start<end)
+                {
+                            vector<unsigned  int>right((vec.begin()+((start+end)/2))+1,vec.end() ),left(vec.begin(),(vec.begin()+((start+end)/2))+1);
+                                    mergesort(left,0 , left.size()-1),
+                                                    mergesort(right, 0, right.size()-1),
+                                                            merge(vec, left,right,0,0,0);
+                                        }
+}
+int main() {
+    vector<unsigned int> vec;
+    cout << "Please insert natural numbers to sort (0 to end): ";
+    while (cin) {
+        unsigned int temp;
+        cin >> temp;
+        if (!cin) break;
+        if (temp == 0) break;
+        vec.push_back(temp);
+    }
+    if (vec.size() > 0)
+        mergesort(vec,0,vec.size()-1);
+    for (unsigned int i : vec) cout << i << " ";
+    cout << endl;
+    system("grep -c ';' main.cc >> temp");
+    ifstream ins("temp");
+    int golf_score;
+    ins >> golf_score;
+    cerr << "Number of strokes: " << golf_score - 17 << endl;
+    system("rm temp");
+}
