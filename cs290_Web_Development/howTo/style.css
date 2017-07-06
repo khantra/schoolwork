@@ -1,0 +1,41 @@
+.jumbotron{
+
+	margin-top:5%;
+	text-align:center;
+}
+.page-header{
+	text-align:center;
+
+}
+.sample{
+	position:relative;
+	float:left;
+	width:100%;
+}
+.tutorial-index a img{
+    float: left;
+    width: 50%;
+    margin: 1% 1%;
+	height: 39rem;
+}
+.tutorial-block {
+	position:relative;
+	float:left;
+	text-align:left;
+}
+
+.secondToLast-media{
+	padding-left: 1%;
+}
+
+.last-media{
+	padding-left: 2%;
+}
+.footer-container{
+	background-color:black;
+	color:white;
+}
+.footer-container footer{
+    text-align: center;
+	padding: 0 5%;
+}

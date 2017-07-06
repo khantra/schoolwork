@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+
+    <title>GetPlayerAchievements</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css" >
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  </head>
+
+  <body>
+<nav class="navbar navbar-default navbar-fixed-top"> 
+	<div class="container-fluid"> <div class="navbar-header"> 
+		<button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span> 
+			<span class="icon-bar"></span> 
+			<span class="icon-bar"></span> 
+			<span class="icon-bar"></span> 
+		</button> 
+	</div> 
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6"> 
+		<ul class="nav navbar-nav"> 
+		<li class="active"><a href="http://khanshadid.com/howto/">Home</a></li> 
+		<li><a href="http://khanshadid.com/howto/node-setup.html">Setup Node Server</a></li> 
+		<li><a href="http://khanshadid.com/howto/api-setup.html">API Setup</a></li> 
+		<li><a href="http://khanshadid.com/howto/GetPlayerAchievements.html">GetPlayerAchievements</a></li> 
+		<li><a href="http://khanshadid.com/howto/examples.html">Examples</a></li> 
+		<li><a href="http://khanshadid.com/howto/jsonandhandlebars.html">JSON and HandleBars</a></li> 		
+		</ul> 
+	</div> 
+	</div> 
+</nav>
+
+<div class="container-fluid">
+	<div class="jumbotron">
+        <h1>GetPlayerAchievements</h1>
+	</div>
+
+</div>
+	<div class="container">
+
+
+ 
+      <h4 class="text-center">What is an API? API stands for Application program interface and it is a set of routines, protocols, and tools for building software applications.</h4>
+  <hr>     
+
+  <div class="row">			
+	       
+
+	  <h1 class="text-center">Getting Strated With Express</h1>
+      <hr>
+		
+        <div class="col-xs-6">		
+      <h4 class="text-center">Enter the following in 'server.js'</h4>
+		
+<code>
+
+var key = 'steamKey';
+<br>
+var steamID = 'steamID';
+<br>
+
+var express = require('express');
+<br>
+
+var app = express();
+<br>
+
+var handlebars = require('express-handlebars').create({
+<br>
+  defaultLayout: 'main'
+  <br>
+});
+<br>
+
+var request = require('request');
+<br>
+
+app.engine('handlebars', handlebars.engine);
+<br>
+
+app.set('view engine', 'handlebars');
+<br>
+
+app.set('port', 3000);
+app.listen(app.get('port'), function(){<br>
+  console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.');<br>
+});
+</code>
+
+		</div>
+        <div class="col-xs-6">		
+			<ol class="list-group">
+				<li class="list-group-item">		
+				<code>var key = 'steamKey';</code>
+				<br>
+				<strong>Store your steam Key in a variable</strong>
+
+				</li>				
+				<li class="list-group-item">		
+				<code>var steamID = 'steamID';</code>
+				<br>
+				<strong>Store your steam ID in a variable</strong>
+
+				</li>
+				<li class="list-group-item">		
+				<code>var express = require('express'); <br>var app = express();</code>
+				<br>
+				<strong>Creates an Express application. </strong>
+
+				</li>		
+				<li class="list-group-item">		
+				<code>var handlebars = require('express-handlebars').create({ 
+				<br>defaultLayout: 'main' 
+				<br>}); <br>
+				app.engine('handlebars', handlebars.engine); 
+				</code>
+				<br>
+				<strong>This is so that you can use Handlebars</strong>
+
+				</li>				
+				<li class="list-group-item">		
+				<code>var request = require('request'); </code>
+				<br>
+				<strong>This is so that you can use 'request' in your app.</strong>
+
+				</li>
+
+				<li class="list-group-item">		
+				<code>app.set('view engine', 'handlebars'); </code>
+				<br>
+				<strong>Set which view engine to use.</strong>
+
+				</li>	
+				<li class="list-group-item">		
+				<code>app.set('port', 3000);</code>
+				<br>
+				<strong>Set the port</strong>
+
+				</li>				
+				<li class="list-group-item">		
+				<code>app.listen(app.get('port'), function()</code>
+				<br>
+				<strong>Make Sure the app is running with a console command.</strong>
+
+				</li>			
+			</ol>
+
+		</div>
+      </div>
+<hr>
+
+ <div class="row">			
+	       
+
+	  <h1 class="text-center">Using The GetPlayerAchievements Method</h1>
+      <hr>
+       <div class="col-xs-6">		
+			<ol class="list-group">
+				<li class="list-group-item">		
+				<code>var url='http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=22380&key='+key+'&steamid='+steamID; </code>
+				<br>
+				<strong>This is the formatted url we are using to retrieve the data in JSON form.</strong>
+
+				</li>				
+				<li class="list-group-item">		
+				<code>request.get(url, function(error, sResponse, sBody) { </code>
+				<br>
+				<strong>Store your steam ID in a variable</strong>
+
+				</li>
+				<li class="list-group-item">		
+				<code>var express = require('express'); <br>var app = express();</code>
+				<br>
+				<strong>Creates an Express application. </strong>
+
+				</li>		
+		
+			</ol>
+
+		</div>
+        <div class="col-xs-6">		
+      <h4 class="text-center">Enter the following in 'server.js'</h4>
+		
+<code>
+app.get('/', function(httpRequest, httpResponse) {<br>
+var url='http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=22380&key='+key+'&steamid='+steamID;
+<br>
+	request.get(url, function(error, sResponse, sBody) {
+<br>
+
+		httpResponse.render('home', {sBody});   
+    });<br>
+});
+</code>
+
+		</div>
+
+      </div>
+  <div class="row">			
+	       
+
+	  <h1 class="text-center">End Result</h1>
+      <hr>
+      <h4 class="text-center">
+	  Notice that the returned results is in JSON format. This is because by default the Steam API returns JSON objects. </h4>
+
+        <div class="col-xs-12">		
+			<img class="thumbnail sample" src="img/GetPlayerAchievements.png" alt="GetPlayerAchievements">
+		</div>
+
+      </div>
+
+     <div class="row">			
+	        <hr>
+
+	  <h1 class="text-center">Important</h1>
+      <hr>
+
+        <div class="col-xs-12">		
+			<p class="lead">This guide will help you get started with the Steam API but first it’s important to understand how to use the Steam API.
+			</p>
+		</div>
+        <div class="col-xs-12">
+			<p class="lead">
+			Every method in the Steam API can return its results in 3 different formats: JSON, XML, and VDF. Each format represents the data described herein differently. For the purpose of this tutorial we will be focusing on working with JSON. 
+			</p>
+		</div>	
+      </div>
+     <div class="row">			
+	        <hr>
+
+	  <h1 class="text-center">The Basic API call</h1>
+      <hr>
+
+        <div class="col-xs-12">		
+			<p class="lead">In order to use the API using GET or POST the URI format of each API request has to begin like so: 
+			</p>
+			<kbd>http://api.steampowered.com/</kbd>
+		</div>
+        <div class="col-xs-12">		
+			<p class="lead">This is a template for how the url is to be formatted to return data in JSON format:: 
+			</p>
+			<kbd>http://api.steampowered.com/</kbd><strong>"interface"/"method"/"method_version"/</strong>
+		</div>
+      </div>
+     <div class="row">			
+	        <hr>
+
+	  <h1 class="text-center">Interface: 
+</h1>
+      <hr>
+
+        <div class="col-xs-12">		
+			<p class="lead">You can view all of  them here: 
+			</p>
+			<a href=" http://api.steampowered.com/ISteamWebAPIUtil/GetSupportedAPIList/v0001/">Steam Interfaces</a>
+		</div>
+        <div class="col-xs-12">		
+			<p class="lead">This is a template for how the url is to be formatted to return data in JSON format:: 
+			</p>
+			<kbd>http://api.steampowered.com/</kbd><strong>"interface"/"method"/"method_version"/</strong>
+		</div>
+        <div class="col-xs-12">	
+<br>		
+			<p class="lead">Here’s a look at the iSteamUserStats: 
+			</p>
+			<div class="row">
+			<code>
+			{
+				"name": "ISteamUserStats",
+				"methods": [
+					{
+						"name": "GetGlobalAchievementPercentagesForApp",
+						"version": 1,
+						"httpmethod": "GET",
+						"parameters": [
+							{
+								"name": "gameid",
+								"type": "uint64",
+								"optional": false,
+								"description": "GameID to retrieve the achievement percentages for"
+							}
+						]
+						
+					},
+					{
+						"name": "GetGlobalAchievementPercentagesForApp",
+						"version": 2,
+						"httpmethod": "GET",
+						"parameters": [
+							{
+								"name": "gameid",
+								"type": "uint64",
+								"optional": false,
+								"description": "GameID to retrieve the achievement percentages for"
+							}
+						]
+						
+					},
+					{
+						"name": "GetGlobalStatsForGame",
+						"version": 1,
+						"httpmethod": "GET",
+						"parameters": [
+							{
+								"name": "appid",
+								"type": "uint32",
+								"optional": false,
+								"description": "AppID that we're getting global stats for"
+							},
+							{
+								"name": "count",
+								"type": "uint32",
+								"optional": false,
+								"description": "Number of stats get data for"
+							},
+							{
+								"name": "name[0]",
+								"type": "string",
+								"optional": false,
+								"description": "Names of stat to get data for"
+							},
+							{
+								"name": "startdate",
+								"type": "uint32",
+								"optional": true,
+								"description": "Start date for daily totals (unix epoch timestamp)"
+							},
+							{
+								"name": "enddate",
+								"type": "uint32",
+								"optional": true,
+								"description": "End date for daily totals (unix epoch timestamp)"
+							}
+						]
+						
+					},
+
+			</code>
+						<p class="lead">We Will be using this When We Call it and display it with Handlebars: 
+
+			</div>
+		</div>		
+      </div>	  
+
+	  
+      <hr>
+
+     <div class="page-header">
+	 	  <h1 class="text-center">Proceed To Next Lesson</h1>
+
+
+      </div>
+     <div class="container tutorial-index">
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64"  src="http://thatgamecompany.com/wp-content/themes/thatgamecompany/_include/img/journey/journey-game-screenshot-1-b.jpg" data-holder-rendered="true"> 
+		</a>
+		
+		
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object"  style="width: 64px; height: 64px;" src="img/home.png"  data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">HOME </h4> The Steam Api doesn’t allow for cross-origin so first we will have to create our own server using Node!
+		</div> 
+		</div>
+	  
+
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/node.png"   data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">Setup Node Server </h4> The Steam Api doesn’t allow for cross-origin so first we will have to create our own server using Node!
+		</div> 
+		</div>		
+
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;"  src="img/steam.png"   data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">API Setup </h4>Set up the Steam API!
+		</div> 
+		</div>		
+
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/steam.png"  data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">GetPlayerAchievements </h4> Use The API for the first time.
+		</div> 
+		</div>	
+
+		<div class="media col-xs-6 secondToLast-media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/handlebarsicon.png"   data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">JSON and HandleBars </h4> Learn how to Use JSON and Handlebars together.
+		</div> 
+		</div>	
+		
+		
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/steam.png"  data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">Examples </h4> A few Example Calls to get you familiar with the API.
+		</div> 
+		</div>	
+
+
+	
+
+
+      </div>
+      <hr>
+
+
+    </div> <!-- /container -->
+      <div class="container-fluid footer-container">
+      <div class="row">
+        <div class="col-md-12 ">.col-sm-6 .col-md-5 .col-lg-6</div>
+      </div>
+	  
+		<footer class="col-xs-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+      </div>
+
+</body>
+
+</html>

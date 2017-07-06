@@ -1,0 +1,7 @@
+<h1>{{finalObj.steamID}}</h1>
+<h2>{{finalObj.gameName}}</h2>
+    <ul>
+        {{#each finalObj.achievements}}
+        <li><strong>apiname:</strong>{{this.apiname}} <strong>achieved:</strong>{{this.achieved}} <strong>unlocktime:</strong>{{this.unlocktime}}</li>
+        {{/each}}
+    </ul>

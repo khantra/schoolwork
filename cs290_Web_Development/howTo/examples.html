@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+
+
+    <title>GetPlayerAchievements</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css" >
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  </head>
+
+  <body>
+<nav class="navbar navbar-default navbar-fixed-top"> 
+	<div class="container-fluid"> <div class="navbar-header"> 
+		<button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6" aria-expanded="false">
+			<span class="sr-only">Toggle navigation</span> 
+			<span class="icon-bar"></span> 
+			<span class="icon-bar"></span> 
+			<span class="icon-bar"></span> 
+		</button> 
+	</div> 
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6"> 
+		<ul class="nav navbar-nav"> 
+		<li class="active"><a href="http://khanshadid.com/howto/">Home</a></li> 
+		<li><a href="http://khanshadid.com/howto/node-setup.html">Setup Node Server</a></li> 
+		<li><a href="http://khanshadid.com/howto/api-setup.html">API Setup</a></li> 
+		<li><a href="http://khanshadid.com/howto/GetPlayerAchievements.html">GetPlayerAchievements</a></li> 
+		<li><a href="http://khanshadid.com/howto/examples.html">Examples</a></li> 
+		<li><a href="http://khanshadid.com/howto/jsonandhandlebars.html">JSON and HandleBars</a></li> 		
+		</ul> 
+	</div> 
+	</div> 
+</nav>
+
+<div class="container-fluid">
+	<div class="jumbotron">
+        <h1>Examples</h1>
+	</div>
+
+</div>
+	<div class="container">
+
+
+ 
+      <h4 class="text-center">Try out some of the other methods and compare the outputs to the given output. 
+	  See if you Here is a few Examples of calls using the Steam API</h4>
+	  <hr>     
+
+  <div class="row">			
+	       
+
+      <hr>
+		
+   
+        <div class="col-xs-12">		
+			<ol class="list-group">
+				<li class="list-group-item">	
+				<h4>GetPlayerSummaries (v0002)URL:</h4>
+				Returns basic profile information for a list of 64-bit Steam IDs.
+				<code>	var url=' http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key='+ key+'&steamids='+steamID;
+</code>
+				<br>
+				<h4>JSON OUTPUT</h4>
+				<p>{ "response": { "players": [ { "steamid": "76561198097834797", "communityvisibilitystate": 3, "personaname": "khandakarshadid", "lastlogoff": 1477989808, "profileurl": "http://steamcommunity.com/profiles/76561198097834797/", "avatar": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg", "avatarmedium": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg", "avatarfull": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg", "personastate": 0, "primaryclanid": "103582791429521408", "timecreated": 1373740920, "personastateflags": 0 } ] } }</p>
+
+				</li>				
+				<li class="list-group-item">	
+				<h4>GetNewsForApp (v0002) URL:</h4>
+				GetNewsForApp returns the latest of a game specified by its appID.
+
+				<code>	    var url='http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid=440&count=3&maxlength=300&format=json';
+
+</code>
+				<br>
+				<h4>JSON OUTPUT</h4>
+				<p>{ "appnews": { "appid": 440, "newsitems": [ { "gid": "1904306376092568991", "title": "Prince of Prolander Event ", "url": "http://store.steampowered.com/news/externalpost/tf2_blog/1904306376092568991", "is_external_url": true, "author": "", "contents": "<a href=\"http://rgl.gg/default.aspx\"> </a> <b>This Sunday at 4:30pm EST</b> <a href=\"http://rgl.gg/default.aspx\" target=\"_blank\">RGL.gg</a> is hosting their Prince of Prolander event. See legendary players <a href=\"https://www.youtube.com/user/stabbyvideo\" target=\"_blank\">Stabby</a> and <a href=\"https://www.youtube.com/user/danethebrain\" target=\"_blank\">Uncle Dane</a> duke it out to answer the age old question: Who is better? Spies or Engies? Come see them settle the score once and for all in the new competitive TF2 format, Pick/Ban Prolander...", "feedlabel": "TF2 Blog", "date": 1495218420, "feedname": "tf2_blog", "feed_type": 0, "appid": 440 }, { "gid": "1904306118438915507", "title": "Annoucing Highlander and 6v6 Seasons", "url": "http://store.steampowered.com/news/externalpost/tf2_blog/1904306118438915507", "is_external_url": true, "author": "", "contents": "<a href=\"http://tfcleague.com/\" target=\"_blank\">TFCL</a> is annoucing their official seasons for Highlander and 6v6! Both seasons will feature medals, a prize pool, and a single division. Both will also consist of 8 regular season rounds, plus a 16 team double elimination playoff. Registration is open now and ends June 13th! Learn more about register...", "feedlabel": "TF2 Blog", "date": 1495056600, "feedname": "tf2_blog", "feed_type": 0, "appid": 440 }, { "gid": "2423345440420818636", "title": "Team Fortress 2 Update Released", "url": "http://store.steampowered.com/news/externalpost/tf2_blog/2423345440420818636", "is_external_url": true, "author": "", "contents": "An update to Team Fortress 2 has been released. The update will be applied automatically when you restart Team Fortress 2. The major changes include: * Added the Rainy Day Cosmetic Case and Rainy Day Cosmetic Key; * New community cosmetics case with 19 items; * Added the Snack's Summery Ultiduo Sies...", "feedlabel": "TF2 Blog", "date": 1494881280, "feedname": "tf2_blog", "feed_type": 0, "appid": 440 } ] , "count": 2385 } }</P>
+				</li>
+				<li class="list-group-item">
+				<h4>GetSchemaForGame (v2) URL:</h4>
+				GetSchemaForGame returns gamename, gameversion and availablegamestats(achievements and stats). This will run for a long time if not exited mid flight.				
+				<code>var url = 'http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/' +'v2/?key='+key+'&appid=6';</code>
+				<br>
+				<p>
+				"game": {
+                "gameName": "PAYDAY 2",
+                "gameVersion": "466",
+                "availableGameStats": {
+                        "achievements": [
+                                {
+                                        "name": "hot_wheels",
+                                        "defaultvalue": 0,
+                                        "displayName": "Coming in Hot",
+                                        "hidden": 0,
+                                        "description": "On day 1 of the Watchdogs job, don't let the cops shoot and destroy the escape vehicle.",
+                                        "icon": "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/218620/f6ed9cd6ec9750bcd36193c74e6f16104f6c1267.jpg",
+                                        "icongray": "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/218620/c336adacd88a21a6010c9b5596192322aecaf265.jpg"
+                                },
+                                {
+                                        "name": "fish_ai",
+                                        "defaultvalue": 0,
+                                        "displayName": "Fish A.I.",
+                                        "hidden": 0,
+                                        "description": "On day 2 of the Watchdogs job, throw a loot bag into the sea, hoping fish move away as it gets near.",
+                                        "icon": "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/218620/19fd9f952f27bad6bc909721a69c6374cfa5e31b.jpg",
+                                        "icongray": "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/218620/6f6357e4e4106e7b120c2ef6814061e1c6e989ec.jpg"
+                                },
+                                {
+                                        "name": "f_in_chemistry",
+                                        "defaultvalue": 0,
+                                        "displayName": "F in Chemistry",
+                                        "hidden": 0,
+                                        "description": "On day 1 of the Rats job or the Cook Off job, blow up the lab.",
+                                        "icon": "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/218620/2b6c1eea57aa735244c2eb03218cd7094b93df1d.jpg",
+                                        "icongray": "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/218620/3d69becfb0c87facaba17e8b9667bd9625b6e41c.jpg"
+                                },
+				</p>
+
+				</li>		
+						
+			</ol>
+
+		</div>
+      </div>
+<hr>
+
+
+
+
+
+
+  
+
+
+
+     <div class="page-header">
+	 	  <h1 class="text-center">Proceed To Next Lesson</h1>
+
+
+      </div>
+      <div class="container tutorial-index">
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64"  src="http://thatgamecompany.com/wp-content/themes/thatgamecompany/_include/img/journey/journey-game-screenshot-1-b.jpg" data-holder-rendered="true"> 
+		</a>
+		
+		
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object"  style="width: 64px; height: 64px;" src="img/home.png"  data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">HOME </h4> The Steam Api doesn’t allow for cross-origin so first we will have to create our own server using Node!
+		</div> 
+		</div>
+	  
+
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/node.png"   data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">Setup Node Server </h4> The Steam Api doesn’t allow for cross-origin so first we will have to create our own server using Node!
+		</div> 
+		</div>		
+
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;"  src="img/steam.png"   data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">API Setup </h4>Set up the Steam API!
+		</div> 
+		</div>		
+
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/steam.png"  data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">GetPlayerAchievements </h4> Use The API for the first time.
+		</div> 
+		</div>	
+
+		<div class="media col-xs-6 secondToLast-media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/handlebarsicon.png"   data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">JSON and HandleBars </h4> Learn how to Use JSON and Handlebars together.
+		</div> 
+		</div>	
+		
+		
+		<div class="media"> 
+		<div class="media-left"> 
+		<a href="#"> 
+		<img alt="64x64" class="media-object" data-src="holder.js/64x64" style="width: 64px; height: 64px;" src="img/steam.png"  data-holder-rendered="true"> </a>
+		</div>
+		<div class="media-body"> 
+		<h4 class="media-heading">Examples </h4> A few Example Calls to get you familiar with the API.
+		</div> 
+		</div>	
+
+
+	
+
+
+      </div>
+      <hr>
+
+
+    </div> <!-- /container -->
+      <div class="container-fluid footer-container">
+      <div class="row">
+        <div class="col-md-12 ">.col-sm-6 .col-md-5 .col-lg-6</div>
+      </div>
+	  
+		<footer class="col-xs-12">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+      </div>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<h1>edit</h1>
+
+
+
+<form action="/editDone">
+	Exercise:	
+	<input type="text" name="exercise" id="exercise" value="{{results.name}}"><br>
+	Reps:	
+	<input type="number" name="reps" id="reps "min="1" max="9999" value="{{results.reps}}"><br>
+	Weight:	
+	<input type="number" name="weight" min="1" max="9999" value="{{results.weight}}"><br>
+	LBS (checked) KG (unchecked):
+	{{#if results.lbs}}
+		<input type="checkbox" name="units" checked><br>
+	{{else}}
+		<input type="checkbox" name="units" ><br>
+	{{/if}}
+	Date:	
+	<input type="date" name="date" id="date" value="{{results.date}}">
+	<br>
+	<input type="hidden" name="id" value={{results.id}}>
+	
+	<input type="submit" name="updateItem" value="Update Item" id="updateItem">
+</form>
+<br>
