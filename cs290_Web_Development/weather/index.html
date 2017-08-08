@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+  <head>
+    <title>
+      AJAX Interaction
+    </title>
+    <meta charset="UTF-8">
+	<style>
+	body{
+	padding:1%;
+	margin:0;
+	}
+	.forecastContainer, .forecastform, #cityGroup{
+	position:relative;
+	float:left;
+	width:96%;
+	padding:1%;
+	}
+	.forecastContainer .block {
+    float: left;
+    width: 22%;
+    padding: 1%;
+    border: 1px solid;
+	}
+	.hidden{
+	display:none;}
+	</style>
+  </head>
+  <body>
+    <h3>Weather Information:</h3>
+      <form>
+	  
+        <div class="block">
+          <label>City Name:</label>
+            <input  type="text" id="cityInput"/>
+        </div>
+		
+        <div class="block">
+          <label>Zip Code:</label>
+            <input  type="number" id="zipInput"/>
+        </div>
+        <div class="block">
+            <button type="submit" id="weatherBTN">Submit</button>
+        </div>
+      </form>
+	
+    <div class="forecastContainer">
+	
+	<form class="forecastform">
+	  
+		<div class="block hidden" id="cityGroup">
+			<div id="city" ></div>
+        </div>
+		
+        <div class="block">
+			<label >Temperature:</label>
+			<div id="temp" ></div>
+        </div>
+        <div class="block">
+			<label >Desc:</label>
+			<div id="weatherDesc" ></div>
+        </div>
+        <div class="block">
+			<label >Wind:</label>
+			<div id="Wind" ></div>
+        </div>
+		
+
+        <div class="block">
+			<label >Humidity:</label>
+			<div id="humidity" ></div>
+        </div>
+		
+
+		
+	</form>
+    </div>
+	
+    <h3>POST Request Test</h3>
+	<h5>Input:</h5>
+	<form class="form-horizontal col-sm-6">
+        <div class="block">
+			<label class="col-sm-2 control-label">Name:</label>
+			<input  id="userName" type="text" />
+        </div>
+		
+        <div class="block">
+			<label class="col-sm-2 control-label">Age:</label>
+			<input  id="userAge" type="number" />
+        </div>
+		
+        <div class="block">
+			<label class="col-sm-2 control-label">Gender:</label>
+			<input  id="userGender" type="text" />
+        </div>
+		
+        <div class="col-sm-offset-2 col-sm-10">
+			<button class="btn btn-default" type="submit" id="pasteSubmit">Submit</button>
+        </div>
+		
+	</form>
+	
+	<h5>Http Bin Response:</h5>
+	<form >
+        <div class="block">
+			<label>Name:</label>
+			<div id="recievedName" ></div>
+        </div>
+		
+        <div class="block">
+			<label >Age:</label>
+			<div id="recievedAge" ></div>
+        </div>
+		
+        <div class="block">
+			<label >Gender:</label>
+			<div id="recievedGender" ></div>
+        </div>
+		
+	</form>
+	  
+	
+	<script src="script.js"></script>
+	</body>
+</html>
